@@ -1,0 +1,95 @@
+{% extends "blog/base.html" %}
+
+{%block content %}
+
+
+
+  
+  <div class="container">
+
+    <!-- tag bar-->
+    <div class="flex-column align-items-stretch flex-shrink-0 my-3 p-3 bg-body rounded shadow-sm border">
+      <div class="dropdown-item d-flex align-items-center gap-2 py-2 border-bottom">
+        <strong>Теги</strong>
+      </div>
+      <ul class="list-unstyled mb-0">   
+        {% for tag in tags %}
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url "blog:post_tag_list" tag.slug %}">
+              {{tag.name}}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- post content -->
+    <div class="flex-column align-items-stretch flex-shrink-0 my-3 p-3 bg-body rounded shadow-sm border">
+      <h1>{{ post.title }}</h1>
+      <h2>{{ post.author }}</h1>
+      <h2>{{ post.publish }}</h1>
+      <h5 class="text-truncate">{{ post.body|truncatewords:30 }}</h5> 
+      <div class="text-end mt-3">
+          <a class="btn btn-outline-primary" href="{% url "blog:post_share" post.slug %}">Поделиться</a>
+      </div>
+    </div>
+
+    <!-- recomendation bar -->
+    <div class="flex-column align-items-stretch flex-shrink-0 my-3 p-3 bg-body rounded shadow-sm border">
+      <div class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none border-bottom fs-5 fw-semibold">Похожие посты</div>
+      <div class="list-group list-group-flush border-bottom scrollarea">
+        {% for similar_post in similar_posts %}
+          <a href="{{ similar_post.get_absolute_url }}" class="list-group-item list-group-item-action py-3 lh-sm">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <strong class="mb-1">{{similar_post.title}}</strong>
+              <small class="text-body-secondary">{{ similar_post.publish }}</small>
+            </div>
+            <div class="col-10 mb-1 small text-truncate">{{ similar_post.body|truncatewords:30 }}</div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>    
+
+  <!-- comments -->
+  <div class="my-3 p-3 bg-body rounded shadow-sm border">
+      <h6 class="border-bottom pb-2 mb-0">Комментарии</h6>
+      {% for comment in comments %}
+          <div class="d-flex text-body-secondary pt-3 border-bottom">
+              <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#6f42c1"></rect><text x="50%" y="50%" fill="#6f42c1" dy=".3em">32x32</text></svg>
+              <p class="pb-3 mb-0 small lh-sm">
+              <span class="d-flex">
+                  <strong class="text-gray-dark me-2">{{ comment.author }}</strong>
+                  <span class="text-muted">{{ comment.created }}</span>
+              </span>
+              {{ comment.body }}
+              </p>
+          </div>
+      {% endfor %}
+      <div class="text-end mt-3">
+          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Добавить комментарий</button>
+      </div>
+  </div>
+
+  <!-- Модальное окно -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Добавление нового комментария</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">       
+            {% include "includes/POST_form.html" %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+{% endblock %}
+

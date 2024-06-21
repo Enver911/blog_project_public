@@ -1,0 +1,59 @@
+{% extends "blog/base.html" %}
+
+{%block content %}
+
+
+
+  
+  <div class="container">
+
+    <!-- tag bar-->
+    <div class="flex-column align-items-stretch flex-shrink-0 my-3 p-3 bg-body rounded shadow-sm border">
+      <div class="dropdown-item d-flex align-items-center gap-2 py-2 border-bottom">
+        <strong>Теги</strong>
+      </div>
+      <ul class="list-unstyled mb-0">   
+        {% for tag in tags %}
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url "blog:post_tag_list" tag.slug %}">
+              {{tag.name}}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- post content -->
+    <div class="flex-column align-items-stretch flex-shrink-0 my-3 p-3 bg-body rounded shadow-sm border">
+      <h1>{{ post.title }}</h1>
+      <h2>{{ post.author }}</h1>
+      <h2>{{ post.publish }}</h1>
+      <h5 class="text-truncate">{{ post.body|truncatewords:30 }}</h5>
+      
+      <div class="d-flex justify-content-between">
+        <a class="btn btn-primary" href="{% url "blog:post_comments" post.slug %}">Комментарии 
+          <span class="badge bg-secondary">{{comments_amount}}</span>
+        </a>
+        <a class="btn btn-primary" href="{% url "blog:post_share" post.slug %}">Поделиться</a>
+      </div>
+    </div>
+
+    <!-- recomendation bar -->
+    <div class="flex-column align-items-stretch flex-shrink-0 my-3 p-3 bg-body rounded shadow-sm border">
+      <div class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none border-bottom fs-5 fw-semibold">Похожие посты</div>
+      <div class="list-group list-group-flush border-bottom scrollarea">
+        {% for similar_post in similar_posts %}
+          <a href="{{ similar_post.get_absolute_url }}" class="list-group-item list-group-item-action py-3 lh-sm">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <strong class="mb-1">{{similar_post.title}}</strong>
+              <small class="text-body-secondary">{{ similar_post.publish }}</small>
+            </div>
+            <div class="col-10 mb-1 small text-truncate">{{ similar_post.body|truncatewords:30 }}</div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>    
+
+{% endblock %}
+

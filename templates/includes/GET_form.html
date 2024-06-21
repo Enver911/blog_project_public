@@ -1,0 +1,10 @@
+<form method="GET" class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+    {% for field in form %}
+      <div class="form-floating mb-3">
+          {{field}}
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>        
+      </div>
+    {% endfor %}
+    <button href="" class="w-100 btn btn-lg btn-primary" type="submit">Отправить</button>
+   
+</form>

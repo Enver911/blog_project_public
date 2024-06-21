@@ -1,0 +1,58 @@
+{% extends "blog/base.html" %}
+
+{%block content %}
+
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5">
+
+        <div class="text-center" id="profile-image" placeholder="Фото профиля">
+          <img class="img-fluid " width="500" src="{{ request.user.profile.avatar.url }}" alt="profile-image"/>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+            {% csrf_token %}
+
+            {% for field in profile %}
+              <div class="form-floating mb-3 needs-validation" novalidate>
+                  {{field}}
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>  
+              </div>    
+              
+              <div class="text-danger">
+                {{ field.errors }}
+              </div>
+            
+            {% endfor %}
+      
+            <div class="text-danger">
+              {{ form.non_field_errors }}
+            </div>
+  
+
+
+            {% for field in form %}
+              <div class="form-floating mb-3 needs-validation" novalidate>
+                  {{field}}
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>  
+              </div>    
+              
+              <div class="text-danger">
+                {{ field.errors }}
+              </div>
+              
+            {% endfor %}
+        
+            <div class="text-danger">
+              {{ form.non_field_errors }}
+            </div>
+        
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Сохранить</button>
+        </form>
+
+        <a href="{% url "users:user_password_change" %}" class="w-100 btn btn-outline-secondary">Изменить пароль</a>
+
+    </div>
+  </div>
+
+{% endblock %}
+
